@@ -1,55 +1,45 @@
 public class Solution {
     public int MaximalRectangle(char[,] matrix) {
-        if (matrix==null)
+        if (matrix!=null)
         {
+            int m=matrix.GetLength(0);
+            int n=matrix.GetLength(1);
+            int[] heights=new int[n];
+            int max=0;
+            for(int i=0;i<m;i++)
+            {
+                for(int j=0;j<n;j++)
+                {
+                    if (matrix[i,j]=='1')
+                        heights[j]=heights[j]+1;
+                    else
+                        heights[j]=0;
+                }
+                max=Math.Max(max,getMaxRectangle(heights));
+            }
+            return max;
+        }
+        else
             return 0;
-        }
-        int m=matrix.GetLength(0);
-        int n=matrix.GetLength(1);
-        int[] heights=new int[n];
-        int max=0;
-        for(int i=0;i<m;i++)
-        {
-            for(int j=0;j<n;j++)
-            {
-                if (matrix[i,j]=='0')
-                {
-                    heights[j]=0;
-                }
-                else
-                {
-                    heights[j]=heights[j]+1;
-                }
-                
-               
-            }
-            int area=LargestRectangleArea(heights);
-            if (max<area)
-            {
-                max=area;
-            }
-        }
-        
-        return max;
     }
     
-    public int LargestRectangleArea(int[] heights) {
-        if (heights==null || heights.Length==0)
-        {
-            return 0;
-        }
-        Stack<int> stack=new Stack<int>();
+    private int getMaxRectangle(int[] heights)
+    {
         int max=0;
-        for(int i=0;i<=heights.Length;i++)
+        if (heights!=null && heights.Length>0)
         {
-            int curt = (i == heights.Length) ? -1 : heights[i];
-            while (!(stack.Count==0) && curt <= heights[stack.Peek()]) {
-                int h = heights[stack.Pop()];
-                int w = stack.Count==0 ? i : i - stack.Peek() - 1;
-                max = Math.Max(max, h * w);
+            Stack<int> stack=new Stack<int>();
+            for(int i=0;i<=heights.Length;i++)
+            {
+                int h=i<heights.Length? heights[i]:-1;
+                while(stack.Count>0 && h<=heights[stack.Peek()])
+                {
+                    int height=heights[stack.Pop()];
+                    int width=stack.Count==0 ? i : i-stack.Peek()-1;
+                    max=Math.Max(max,height*width);
+                }
+                stack.Push(i);
             }
-            stack.Push(i);
-
         }
         return max;
     }
