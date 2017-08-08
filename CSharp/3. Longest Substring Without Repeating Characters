@@ -1,0 +1,30 @@
+public class Solution {
+    public int LengthOfLongestSubstring(string s) {
+        int num=0;
+        if (!string.IsNullOrEmpty(s))
+        {
+            Dictionary<char,int> dict=new Dictionary<char,int>();
+            int start=0;
+            for(int i=0;i<s.Length;i++)
+            {
+                if (!dict.ContainsKey(s[i]))
+                    dict.Add(s[i],i);
+                else
+                {
+                    if (dict[s[i]]<start)
+                        dict[s[i]]=i;
+                    else
+                    {
+                        num=Math.Max(i-start,num);
+                        start=dict[s[i]]+1;
+                        dict[s[i]]=i;
+                    }
+                }
+            }
+            num=Math.Max(num,s.Length-start);
+            if (num==0)
+                num=s.Length;
+        }
+        return num;
+    }
+}

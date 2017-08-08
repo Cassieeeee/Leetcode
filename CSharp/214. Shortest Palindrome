@@ -1,0 +1,56 @@
+public class Solution {
+    public string ShortestPalindrome(string s) {
+        if (!string.IsNullOrEmpty(s))
+        {
+            if (s.Length==1)
+                return s;
+            
+            int m=s.Length;
+            int max=0;
+            for(int i=(m-1)/2;i>=0;i--)
+            {
+                if (isPalindrome(s,i-1,i+1))
+                {
+                    max=Math.Max(2*i+1,max);
+                }
+                if (s[i]==s[i+1] && isPalindrome(s,i-1,i+2))
+                {
+                    max=Math.Max(2*(i+1),max);
+                }
+                if (max>0)
+                    break;
+            }
+            string leftStr=s.Substring(max);
+            return revert(leftStr)+s;
+        }
+        else
+            return s;
+        
+    }
+    
+    private bool isPalindrome(string s,int left,int right)
+    {
+        while(left>=0 && right<s.Length && s[left]==s[right])
+        {
+            left--;
+            right++;
+        }
+        return left<0;
+    }
+    
+    private string revert(string s)
+    {
+         char[] arr=s.ToCharArray();
+        int start=0;
+        int end=arr.Length-1;
+        while(start<end)
+        {
+            char temp=arr[start];
+            arr[start]=arr[end];
+            arr[end]=temp;
+            start++;
+            end--;
+        }
+        return new string(arr);
+    }
+}
