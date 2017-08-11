@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    Dictionary<int,int> dict=new Dictionary<int,int>();
+    public IList<int> LargestValues(TreeNode root) {
+        IList<int> list=new List<int>();
+        if (root!=null)
+        {
+            gothroughTree(root,0);
+            foreach(int key in dict.Keys)
+            {
+                list.Add(dict[key]);
+            }
+        }
+        return list;
+    }
+    
+    private void gothroughTree(TreeNode node,int level)
+    {
+        if (node==null)
+            return;
+        
+        if (dict.ContainsKey(level))
+        {
+            if (dict[level]<node.val)
+                dict[level]=node.val;
+        }
+        else
+            dict.Add(level, node.val);
+        gothroughTree(node.left,level+1);
+        gothroughTree(node.right,level+1);
+    }
+}
