@@ -1,0 +1,49 @@
+public class Solution {
+    public IList<string> FindAllConcatenatedWordsInADict(string[] words) {
+        IList<string> list=new List<string>();
+        if (words!=null && words.Length>0)
+        {
+            Dictionary<int,HashSet<string>> dict=new Dictionary<int,HashSet<string>>();
+            int shortestLength=words[0].Length;
+            foreach(string w in words)
+            {
+                int l=w.Length;
+                if (l>0)
+                {
+                    if (dict.ContainsKey(l))
+                        dict[l].Add(w);
+                    else
+                        dict.Add(l,new HashSet<string>(){w});
+                    shortestLength=Math.Min(l,shortestLength);
+                }
+            }
+            foreach(string w in words)
+            {
+                if (w.Length<2*shortestLength)
+                    continue;
+                if (DFS(w,dict,shortestLength,0))
+                    list.Add(w);
+            }
+            
+        }
+        return list;
+    }
+    
+    bool DFS(string w,Dictionary<int,HashSet<string>> dict, int shortestLength,int index)
+    {
+        if (w=="" && index>1)
+            return true;
+        else if (w=="")
+            return false;
+        for (int i=shortestLength;i<=w.Length;i++)
+        {
+            string sub1=w.Substring(0,i);
+            if (!dict.ContainsKey(sub1.Length) || !dict[sub1.Length].Contains(sub1))
+                continue;
+            bool result=DFS(w.Substring(i),dict,shortestLength,index+1);
+            if (result)
+                return true;
+        }
+        return false;
+    }
+}

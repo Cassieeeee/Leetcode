@@ -1,0 +1,40 @@
+public class Solution {
+    public bool Makesquare(int[] nums) {
+        if (nums==null || nums.Length<4)
+            return false;
+        var q=from n in nums
+              orderby n descending
+              select n;
+        nums=q.ToArray();
+        int sum=0;
+        foreach(int n in nums)
+        {
+            sum+=n;
+        }
+        if (sum % 4 !=0)
+            return false;
+        return DFS(nums,new int[4],sum/4,0);
+    }
+    
+    private bool DFS(int[] nums,int[] sums,int target,int index)
+    {
+        if (index==nums.Length)
+        {
+            if (sums[0]==target && sums[1]==target && sums[2]==target)
+                return true;
+            else 
+                return false;
+        }
+        for(int i=0;i<4;i++)
+        {
+            if (sums[i]+nums[index]>target)
+                continue;
+            sums[i]+=nums[index];
+            bool result=DFS(nums,sums,target,index+1);
+            if (result)
+                return true;
+            sums[i]-=nums[index];
+        }
+        return false;
+    }
+}
