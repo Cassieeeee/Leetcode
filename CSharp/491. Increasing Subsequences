@@ -1,0 +1,32 @@
+public class Solution {
+    IList<IList<int>> list=new List<IList<int>>();
+    
+    public IList<IList<int>> FindSubsequences(int[] nums) {
+        if (nums!=null && nums.Length>0)
+        {
+           // Array.Sort(nums);
+            DFS(nums,0,new List<int>());
+        }
+        return list;
+    }
+    
+    private void DFS(int[] nums,int index,List<int> l)
+    {
+        if (l.Count>=2)
+        {
+            list.Add(l.Select(item=>item).ToList<int>());
+        }
+        List<int> dup=new List<int>();
+        for(int i=index;i<nums.Length;i++)
+        {
+            if (dup.Contains(nums[i]))
+                continue;
+            if (index>0 && nums[i]<nums[index-1])
+                continue;
+            dup.Add(nums[i]);
+            l.Add(nums[i]);
+            DFS(nums,i+1,l);
+            l.Remove(nums[i]);
+        }
+    }
+}

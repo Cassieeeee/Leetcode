@@ -1,0 +1,52 @@
+public class Solution {
+    public IList<int[]> PacificAtlantic(int[,] matrix) {
+        IList<int[]> list=new List<int[]>();
+        if (matrix!=null)
+        {
+            int m=matrix.GetLength(0);
+            int n=matrix.GetLength(1);
+            if (m>0 && n>0)
+            {
+                bool[,] pacific=new bool[m,n];
+                bool[,] atlantic=new bool[m,n];
+                
+                for(int i=0;i<m;i++)
+                {
+                    DFS(matrix,pacific,int.MinValue,i,0);
+                    DFS(matrix,atlantic,int.MinValue,i,n-1);
+                }
+                for(int i=0;i<n;i++)
+                {
+                    DFS(matrix,pacific,int.MinValue,0,i);
+                    DFS(matrix,atlantic,int.MinValue,m-1,i);
+                }
+                
+                for(int i=0;i<m;i++)
+                {
+                    for(int j=0;j<n;j++)
+                    {
+                        if (pacific[i,j]==atlantic[i,j] && pacific[i,j]==true)
+                            list.Add(new int[]{i,j});
+                    }
+                }
+            }
+        }
+        return list;
+    }
+    
+    int[] dx=new int[4]{0,0,1,-1};
+    int[] dy=new int[4]{1,-1,0,0};
+    
+    private void DFS(int[,] matrix,bool[,] visited,int height,int x,int y)
+    {
+        if (x<0 || x==matrix.GetLength(0) || y<0 || y==matrix.GetLength(1) || visited[x,y] || matrix[x,y]<height)
+            return;
+        visited[x,y]=true;
+        for(int i=0;i<4;i++)
+        {
+            int nx=x+dx[i];
+            int ny=y+dy[i];
+            DFS(matrix,visited,matrix[x,y],nx,ny);
+        }
+    }
+}
