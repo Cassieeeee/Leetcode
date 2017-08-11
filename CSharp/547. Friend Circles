@@ -1,0 +1,35 @@
+public class Solution {
+    public int FindCircleNum(int[,] M) {
+        if (M!=null)
+        {
+            int n=M.GetLength(0);
+            int[] used=new int[n];
+            
+            int count=0;
+            for(int i=0;i<n;i++)
+            {
+                if (used[i]==0)
+                {
+                    count++;
+                    used[i]=1;
+                    Queue<int> queue=new Queue<int>();
+                    queue.Enqueue(i);
+                    while(queue.Count>0)
+                    {
+                        int x=queue.Dequeue();
+                        for(int j=0;j<n;j++)
+                        {
+                            if (j!=x && used[j]==0 && M[x,j]==1)
+                            {
+                                used[j]=1;
+                                queue.Enqueue(j);
+                            }
+                        }
+                    }
+                }
+            }
+            return count;
+        }
+        return 0;
+    }
+}

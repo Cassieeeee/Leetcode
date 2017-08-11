@@ -1,0 +1,77 @@
+public class Solution {
+    int count=0;
+    public int FindPaths(int m, int n, int N, int i, int j) {
+        //int[,] used=new int[m,n];
+        //used[i,j]=1;
+        //findPath(m,n,N,i,j,0,used);
+        //return count;
+        
+        long limit = 1000000007;
+        long[,,] dp = new long[N + 1,m,n];
+        for (int k = 1; k <= N; k++) {
+            for (int i1 = 0; i1 < m; i1++) {
+                for (int j1 = 0; j1 < n; j1++) {
+                    dp[k,i1,j1] += i1 == 0     ? 1 : dp[k - 1,i1 - 1,j1];
+                    dp[k,i1,j1] += i1 == m - 1 ? 1 : dp[k - 1,i1 + 1,j1];
+                    dp[k,i1,j1] += j1 == 0     ? 1 : dp[k - 1,i1,j1 - 1];
+                    dp[k,i1,j1] += j1 == n - 1 ? 1 : dp[k - 1,i1,j1 + 1];
+                    dp[k,i1,j1] %= limit;
+                }
+            }
+        }
+        return (int)dp[N,i,j];      
+    }
+    
+    private void findPath(int m,int n,int N,int i,int j,int step,int[,] used)
+    {
+            if (step<N && count<10000007)
+            {
+                if ((i==0 || i==m-1) && (j==0 || j==n-1))
+                {
+                    if (m>1 && n>1)
+                    {
+                        count+=2;
+                    }
+                    else if ((m==1 && n>1) || (m>1 && n==1))
+                    {
+                        count+=3;
+                    }
+                    else if (m==1 && n==1)
+                        count+=4;
+                }
+                else if ((i==0 ||i==m-1) && 0<j && j<n-1)
+                    count+= m>1 ? 1:2;
+                else if (i>0 && i<m-1 && (j==0 || j==n-1))
+                    count+=n>1?1:2;
+
+                if (count<10000007)
+                {
+                        if (i>0)
+                        {
+                            used[i-1,j]=1;
+                            findPath(m,n,N,i-1,j,step+1,used);
+                            used[i-1,j]=0;
+                        }
+                        if (i<m-1)
+                        {
+                            used[i+1,j]=1;
+                            findPath(m,n,N,i+1,j,step+1,used);
+                            used[i+1,j]=0;
+                        }
+                        if (j>0)
+                        {
+                            used[i,j-1]=1;
+                            findPath(m,n,N,i,j-1,step+1,used);
+                            used[i,j-1]=0;
+                        }
+                        if (j<n-1 )
+                        {
+                            used[i,j+1]=1;
+                            findPath(m,n,N,i,j+1,step+1,used);
+                            used[i,j+1]=0;
+                        }                  
+                }
+            }
+        
+    }
+}
