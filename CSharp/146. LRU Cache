@@ -1,0 +1,110 @@
+public class LRUCache {
+
+    int capacity=0;
+    Dictionary<int,int> dict;
+    ListNode head;
+    ListNode end;
+    public LRUCache(int capacity) {
+        this.capacity=capacity;
+        dict=new Dictionary<int,int>();
+        head=null;
+        end=null;
+    }
+    
+    public int Get(int key) {
+        int value=-1;
+        if (dict.Keys.Contains(key))
+        {
+           value=dict[key];
+           moveKey(key);
+        }
+        return value;
+    }
+    
+    private void moveKey(int key)
+    {
+            if (key==head.val && key!=end.val)
+            {
+                head=head.next;
+                end.next=new ListNode(key);
+                end=end.next;
+            }
+            else if (key!=end.val)
+            {
+                ListNode node=head;
+                while (node.next!=null)
+                {
+                    if (node.next.val==key)
+                    {
+                        node.next=node.next.next;
+                        end.next=new ListNode(key);
+                        end=end.next;
+                        break;
+                    }
+                    node=node.next;
+                }
+            }
+    }
+    
+    public void Put(int key, int value) {
+        if (dict.Keys.Contains(key))
+        {
+            dict[key]=value;
+            moveKey(key);
+        }
+        else
+        {
+            int count=dict.Keys.Count;
+            dict.Add(key,value);
+            if (count<capacity)
+            {
+                
+                if (head==null)
+                {
+                    head=new ListNode(key);
+                    end=head;
+                }
+                else
+                {
+                    end.next=new ListNode(key);
+                    end=end.next;
+                }
+            }
+            else
+            {
+                dict.Remove(head.val);
+                if (head.next!=null)
+                {
+                    head=head.next;
+                    end.next=new ListNode(key);
+                    end=end.next;
+                }
+                else
+                {
+                    head=new ListNode(key);
+                    end=head;
+                }
+                
+            }
+        }
+        
+    }
+    
+    class ListNode
+    {
+        internal int val;
+        internal ListNode next;
+        
+        internal ListNode(int value)
+        {
+            val=value;
+        }
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.Get(key);
+ * obj.Put(key,value);
+ */
