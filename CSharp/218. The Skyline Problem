@@ -1,0 +1,50 @@
+public class Solution {
+    public IList<int[]> GetSkyline(int[,] buildings) {
+        IList<int[]> results=new List<int[]>();
+        List<int[]> heights=new List<int[]>();
+        int n=buildings.GetLength(0);
+        for(int i=0;i<n;i++)
+        {
+            heights.Add(new int[2]{buildings[i,0],0-buildings[i,2]});
+            heights.Add(new int[2]{buildings[i,1],buildings[i,2]});
+        }
+        var q=from h in heights
+              orderby h[0],h[1]
+              select h;
+        //foreach(int[] num in q)
+        //{
+        //    Console.WriteLine("{0},{1}",num[0],num[1]);
+        //}
+        SortedList<int,int> list=new SortedList<int,int>();
+        list.Add(0,0);
+        int prev=0;
+        
+        foreach(int[] h in q)
+        {
+            if (h[1]<0)
+            {
+                if (!list.ContainsKey(0-h[1]))
+                    list.Add(0-h[1],0);
+                else
+                    list[0-h[1]]++;
+            }
+            else
+            {
+                if (list[h[1]]==0)
+                    list.Remove(h[1]);
+                else
+                    list[h[1]]--;
+            }   
+            
+            int cur=list.Keys.Last();
+            
+            if (prev!=cur)
+            {
+                results.Add(new int[2]{h[0],cur});
+                prev=cur;
+            }
+        }
+        
+        return results;
+    }
+}
