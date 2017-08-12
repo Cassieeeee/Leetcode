@@ -1,0 +1,63 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public IList<IList<int>> VerticalOrder(TreeNode root) {
+        IList<IList<int>> list=new List<IList<int>>();
+        if (root!=null)
+        {
+            Dictionary<int,List<int>> dict=new Dictionary<int,List<int>>();
+            traverseTree(root,dict);
+            var q=from k in dict.Keys
+                  orderby k ascending
+                  select k;
+            foreach(int key in q)
+            {
+                list.Add(dict[key]);
+            }
+        }
+        
+        return list;
+    }
+    
+    private void traverseTree(TreeNode node,Dictionary<int,List<int>> dict)
+    {
+        Queue<Item> queue=new Queue<Item>();
+        queue.Enqueue(new Item(0,node));
+        while(queue.Count>0)
+        {
+            Item item=queue.Dequeue();
+            if (dict.ContainsKey(item.Level))
+            {
+                dict[item.Level].Add(item.Node.val);
+            }
+            else
+                dict.Add(item.Level,new List<int>(){item.Node.val});
+            if (item.Node.left!=null)
+            {
+                queue.Enqueue(new Item(item.Level-1,item.Node.left));
+            }
+            if (item.Node.right!=null)
+            {
+                queue.Enqueue(new Item(item.Level+1,item.Node.right));
+            }
+        }
+    }
+    
+    class Item
+    {
+        public int Level;
+        public TreeNode Node;
+        public Item(int level, TreeNode node)
+        {
+            Level=level;
+            Node=node;
+        }
+    }
+}

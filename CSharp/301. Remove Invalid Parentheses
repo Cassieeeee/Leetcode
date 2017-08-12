@@ -1,0 +1,64 @@
+public class Solution {
+    public IList<string> RemoveInvalidParentheses(string s) {
+        IList<string> list=new List<string>();
+        if (!string.IsNullOrEmpty(s))
+        {
+            removeInvalid(s,0,0,list,new char[]{'(',')'});
+        }
+        if (s==string.Empty)
+        {
+            list.Add(s);
+        }
+        return list;
+    }
+    
+    private void removeInvalid(string s,int lastI,int lastJ,IList<string> list,char[] p)
+    {
+        int k=0;
+        int i=lastI;
+        while(i<s.Length)
+        {
+            if (s[i]==p[0])
+                k++;
+            else if (s[i]==p[1])
+                k--;
+            if (k<0)
+            {
+                for(int j=lastJ;j<=i;j++)
+                {
+                    if (s[j]==p[1] && (j==lastJ || s[j-1]!=p[1]))
+                    {
+                        removeInvalid(s.Substring(0,j)+s.Substring(j+1),i,j,list,p);
+                    }
+                }
+                return;
+            }
+            i++;
+        }
+        
+        string reverted=revert(s);
+        if (p[0]=='(')
+        {
+            removeInvalid(reverted,0,0,list,new char[] {')','('});
+        }
+        else
+            list.Add(reverted);
+        
+    }
+    
+    private string revert(string s)
+    {
+        char[] arr=s.ToCharArray();
+        int start=0;
+        int end=s.Length-1;
+        while (start<end)
+        {
+            char temp=arr[start];
+            arr[start]=arr[end];
+            arr[end]=temp;
+            start++;
+            end--;
+        }
+        return new string(arr);
+    }
+}

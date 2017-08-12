@@ -1,0 +1,126 @@
+public class Solution {
+    public bool HasPath(int[,] maze, int[] start, int[] destination) {
+        if (maze!=null && start!=null && destination!=null)
+        {
+            int dx=destination[0];
+            int dy=destination[1];
+            int sx=start[0];
+            int sy=start[1];
+            int m=maze.GetLength(0);
+            int n=maze.GetLength(1);
+            int[,] visited=new int[m,n];
+            visited[sx,sy]=1;
+            if (maze[dx,dy]==1 || maze[sx,sy]==1)
+                return false;
+            return findPath(maze,visited,sx,sy,dx,dy);
+        }
+        else
+            return false;
+    }
+    
+    int[] dirX=new int[4]{0,0,1,-1};
+    int[] dirY=new int[4]{1,-1,0,0};
+    
+    private bool findPath(int[,] maze,int[,] visited,int x,int y,int dx,int dy)
+    {
+        if (x==dx && y==dy)
+        {
+            return true;
+        }
+        for(int i=0;i<4;i++)
+        {
+            int nx=x;
+            int ny=y;
+            while (nx>=0 && ny>=0 && nx<maze.GetLength(0) && ny<maze.GetLength(1) && maze[nx,ny]==0)
+            {
+                nx+=dirX[i];
+                ny+=dirY[i];
+            }
+            nx-=dirX[i];
+            ny-=dirY[i];
+            
+            if (visited[nx,ny]==1)
+                continue;
+            visited[nx,ny]=1;
+            bool r=findPath(maze,visited,nx,ny,dx,dy);
+            if (r)
+                return true;
+            visited[nx,ny]=0;;
+        }
+        return false;
+    }
+}
+
+WFS -Accepted
+
+public class Solution {
+    public bool HasPath(int[,] maze, int[] start, int[] destination) {
+        if (maze!=null && start!=null && destination!=null)
+        {
+            int dx=destination[0];
+            int dy=destination[1];
+            int sx=start[0];
+            int sy=start[1];
+            int m=maze.GetLength(0);
+            int n=maze.GetLength(1);
+            int[,] visited=new int[m,n];
+            visited[sx,sy]=1;
+            return findPath(maze,visited,sx,sy,dx,dy);
+        }
+        else
+            return false;
+    }
+    
+    int[] dirX=new int[4]{0,0,1,-1};
+    int[] dirY=new int[4]{1,-1,0,0};
+    
+    private bool findPath(int[,] maze,int[,] visited,int x,int y,int dx,int dy)
+    {
+        Queue<MyPoint> points=new Queue<MyPoint>();
+        points.Enqueue(new MyPoint(x,y));
+        
+        while(points.Count>0)
+        {
+            MyPoint p=points.Dequeue();
+            
+            for(int i=0;i<4;i++)
+            {
+                int nx=p.X;
+                int ny=p.Y;
+            
+                while (nx>=0 && ny>=0 && nx<maze.GetLength(0) && ny<maze.GetLength(1) && maze[nx,ny]==0)
+                {
+                    nx+=dirX[i];
+                    ny+=dirY[i];
+                }
+                nx-=dirX[i];
+                ny-=dirY[i];
+
+                if (nx==dx && ny==dy)
+                {
+                    return true;
+                }
+                if (visited[nx,ny]==1)
+                    continue;
+                visited[nx,ny]=1;
+                //Console.WriteLine("{0},{1}",nx,ny);
+                points.Enqueue(new MyPoint(nx,ny));
+            }
+        }
+        return false;
+    }
+    
+   
+}
+
+    public class MyPoint
+    {
+        public MyPoint(int x, int y)
+        {
+            X=x;
+            Y=y;
+        }
+        
+        public int X;
+        public int Y;
+    }

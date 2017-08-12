@@ -1,0 +1,49 @@
+public class Solution {
+    public string DecodeString(string s) {
+        string result = "";
+            int i = 0;
+            while (i < s.Length)
+            {
+                char c = s[i];
+                if (Char.IsDigit(c))
+                {
+                    int num = 0;
+                    while (char.IsDigit(s[i]))
+                    {
+                        num = num * 10 + (s[i] - '0');
+                        i++;
+                    }
+                    int j = i + 1;
+                    int k = 1;
+                    while (j < s.Length && k > 0)
+                    {
+
+                        if (s[j] == '[')
+                        {
+                            k++;
+                        }
+                        if (s[j] == ']')
+                        {
+                            k--;
+                        }
+                        j++;
+                    }
+                    string subStr = s.Substring(i + 1, j - i - 2);
+                    string dec = DecodeString(subStr);
+                    while (num > 0)
+                    {
+                        result += dec;
+                        num--;
+                    }
+                    i = j;
+                }
+                else
+                {
+                    result += c.ToString();
+                    i++;
+                }
+               
+            }
+            return result;
+    }
+}
