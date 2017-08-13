@@ -1,0 +1,70 @@
+public class Solution {
+    public string AlienOrder(string[] words) {
+        if (words!=null && words.Length>0)
+        {
+            if (words.Length==1)
+                return words[0];
+            Dictionary<char,int> indegree=new Dictionary<char,int>();
+            Dictionary<char,List<char>> ht=new Dictionary<char,List<char>>();
+            
+            foreach(string word in words)
+            {
+                foreach(char c in word)
+                {
+                    if (!indegree.ContainsKey(c))
+                        indegree.Add(c,0);
+                }
+            }
+            for(int i=1;i<words.Length;i++)
+            {
+                int len1=words[i-1].Length,len2=words[i].Length;
+                int j=0;
+                while (j<Math.Min(len1,len2) && words[i-1][j]==words[i][j])
+                    j++;
+                if (j==len1)
+                    continue;
+                
+                if (ht.ContainsKey(words[i-1][j]))
+                {
+                    if (!ht[words[i-1][j]].Contains(words[i][j]))
+                    {
+                        ht[words[i-1][j]].Add(words[i][j]);
+                        indegree[words[i][j]]++;
+                    }
+                }
+                else
+                {
+                    ht.Add(words[i-1][j],new List<char>(){words[i][j]});
+                    indegree[words[i][j]]++;
+                }
+            }
+            string res="";
+            for(int i=0;i<indegree.Keys.Count;i++)
+            {
+                char c=' ';
+                foreach(KeyValuePair<char,int> pair in indegree)
+                {
+                    if (pair.Value==0)
+                    {
+                        c=pair.Key;
+                        break;
+                    }
+                }
+                if (c==' ')
+                    return "";
+                res+=c.ToString();
+                indegree[c]--;
+                if (ht.ContainsKey(c))
+                {
+                    foreach(char c1 in ht[c])
+                    {
+                        indegree[c1]--;
+                    }
+                }
+            }
+            return res;
+        }
+        else
+            return "";
+    }
+}
