@@ -1,0 +1,59 @@
+public class WordDictionary {
+
+    Dictionary<int,HashSet<string>> dict;
+    /** Initialize your data structure here. */
+    public WordDictionary() {
+        dict=new Dictionary<int,HashSet<string>>();
+    }
+    
+    /** Adds a word into the data structure. */
+    public void AddWord(string word) {
+        if (!string.IsNullOrEmpty(word))
+        {
+            int l=word.Length;
+            if (dict.ContainsKey(l))
+            {
+                if (!dict[l].Contains(word))
+                    dict[l].Add(word);
+            }
+            else
+                dict.Add(l, new HashSet<string>(){word});
+        }
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    public bool Search(string word) {
+        if (!string.IsNullOrEmpty(word))
+        {
+            int l=word.Length;
+            if (dict.ContainsKey(l))
+            {
+
+                if (dict[l].Contains(word))
+                    return true;
+                foreach(string w in dict[l])
+                {
+                    bool found=true;
+                    for(int j=0;j<l;j++)
+                    {
+                        if (w[j]!=word[j] && word[j]!='.')
+                        {
+                            found=false;
+                            break;
+                        }
+                    }
+                    if (found)
+                        return found;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.AddWord(word);
+ * bool param_2 = obj.Search(word);
+ */

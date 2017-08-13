@@ -1,0 +1,30 @@
+/* The Read4 API is defined in the parent class Reader4.
+      int Read4(char[] buf); */
+
+public class Solution : Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Maximum number of characters to read
+     * @return    The number of characters read
+     */
+    public int Read(char[] buf, int n) {
+        int pos=0;
+        int buffPtr=0;
+        int buffCnt=0;
+        char[] buff=new char[4];
+        while(pos<n)
+        {
+            if (buffPtr==0)
+                buffCnt=Read4(buff);
+            if (buffCnt==0)
+                break;
+            while(pos<n && buffPtr<buffCnt)
+            {
+                buf[pos++]=buff[buffPtr++];
+            }
+            buffPtr=0;
+        }
+        
+        return pos;
+    }
+}

@@ -1,0 +1,171 @@
+Timeout solution
+public class Solution {
+    Dictionary<char,int> optLevel=new Dictionary<char,int>();
+    List<char> optList=new List<char>();
+    public Solution()
+    {
+        optLevel.Add('+',1);
+        optLevel.Add('-',2);
+        optLevel.Add('*',3);
+        optList.Add(' ');
+        optList.Add('+');
+        optList.Add('-');
+        optList.Add('*');
+    }
+    public IList<string> AddOperators(string num, int target) {
+        IList<string> list=new List<string>();
+        if (!string.IsNullOrEmpty(num))
+        {
+            int[] opts=new int[num.Length-1];
+            generateOperators(num,opts,target,list,0);
+        }
+        return list;
+    }
+    
+    private void generateOperators(string num,int[] opts,int target,IList<string> list, int index)
+    {
+        if (index==opts.Length)
+        {
+            string newStr="";
+            //int optCount=0;
+            for(int i=0;i<num.Length-1;i++)
+            {
+                newStr+=num[i].ToString()+optList[opts[i]].ToString().Trim();
+            }
+            newStr+=num[num.Length-1].ToString();
+            
+            long res=getResult(newStr);
+                //if (opts[0]==3 && opts[1]==3 && opts[2]==3 && opts[3]==3)
+                //    Console.WriteLine("{0}={1}",newStr,res);
+            if (res==target)
+            {
+                list.Add(newStr);
+            } 
+        }
+        else
+        {
+            for(int i=0;i<4;i++)
+            {
+                opts[index]=i;
+                if (i==0 && num[index]=='0')
+                {
+                    if (index==0)
+                        continue;
+                    
+                    int j=index-1;
+                    while(j>0 && num[j]==0 && opts[j]==0)
+                    {
+                        j--;
+                    }
+                    if (opts[j]>0 || (j==0 && num[j]=='0'))
+                        continue;
+                }
+                generateOperators(num,opts,target,list,index+1);
+            }
+        }
+    }
+    
+    private long getResult(string s)
+    {
+        Stack<long> numStack=new Stack<long>();
+        Stack<char> optStack=new Stack<char>();
+        long res=0;
+        long num=0;
+        for(int i=0;i<s.Length;i++)
+        {           
+            if (char.IsDigit(s[i]))
+            {
+                num=num*10+(s[i]-'0');
+            }
+            else
+            {
+                numStack.Push(num);
+                num=0;
+                while (optStack.Count>0 && optLevel[optStack.Peek()]>=optLevel[s[i]])
+                {
+                    long num2=numStack.Pop();
+                    long num1=numStack.Pop();
+                    char opt=optStack.Pop();
+                    res=compute(num1,num2,opt);
+                    numStack.Push(res);
+                }
+                optStack.Push(s[i]);
+            }
+        }
+        numStack.Push(num);
+        while(optStack.Count>0)
+        {
+            long num2=numStack.Pop();
+            long num1=numStack.Pop();
+            char opt=optStack.Pop();
+            res=compute(num1,num2,opt);
+            numStack.Push(res);
+        }
+        res=numStack.Pop();
+        return res;
+    }
+    
+    private long compute(long num1,long num2, char opt)
+    {
+        long res=0;
+        switch(opt)
+        {
+            case '+':
+                res= num1+num2;
+                break;
+            case '-':
+                res=num1-num2;
+                break;
+            case '*':
+                res=num1*num2;
+                break;
+        }
+        return res;
+    }
+}
+
+Accepted Solution
+
+public class Solution {
+
+    public IList<string> AddOperators(string num, int target) {
+        IList<string> list=new List<string>();
+        if (!string.IsNullOrEmpty(num))
+        {
+            generateOperators(num,"",0,list,target,0,0);
+        }
+        return list;
+    }
+    
+    private void generateOperators(string num,string path, int pos,IList<string> list, int target,long eval, long multed)
+    {
+        if (pos==num.Length)
+        {
+            //Console.WriteLine("{0}={1}",path,eval);
+            if (eval==target)
+                list.Add(path);
+        }
+        else
+        {
+            for(int i=pos;i<num.Length;i++)
+            {
+                if (i!=pos && num[pos]=='0')
+                    break;
+                string v=num.Substring(pos,i-pos+1);
+                long n=long.Parse(v);
+                if (pos==0)
+                {
+                    generateOperators(num, v,i+1,list,target,n,n);
+                }
+                else
+                {
+                    generateOperators(num,path+"+"+v,i+1,list,target,eval+n,n);
+                    generateOperators(num,path+"-"+v,i+1,list,target,eval-n,-n);
+                    generateOperators(num,path+"*"+v,i+1,list,target,eval-multed+multed*n,multed*n);
+                }
+            }
+        }
+    }
+    
+}
+
