@@ -1,0 +1,23 @@
+
+public class Solution {
+    public int TotalHammingDistance(int[] nums) {
+        if (nums!=null)
+        {
+            int n=nums.Length;
+            int sum=0;
+            for(int i=0;i<32;i++)
+            {
+                int bitCount=0;
+                for(int j=0;j<n;j++)
+                {
+                    bitCount+=(nums[j]>>i) & 1;
+                }
+                sum+=bitCount*(n-bitCount);
+            }
+            return sum;
+        }
+        else
+            return 0;
+    }
+    
+}

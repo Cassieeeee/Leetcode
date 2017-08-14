@@ -1,0 +1,65 @@
+public class AutocompleteSystem {
+
+    Dictionary<string,int> dict=new Dictionary<string,int>();
+    Dictionary<string,int> dataDict;
+    string data="";
+    public AutocompleteSystem(string[] sentences, int[] times) {
+        if (sentences!=null)
+        {
+            for(int i=0;i<sentences.Length;i++)
+            {
+                dict.Add(sentences[i],times[i]);
+            }
+        }
+    }
+    
+    public IList<string> Input(char c) {
+        if (c=='#')
+        {
+            if (dict.ContainsKey(data))
+                dict[data]++;
+            else
+                dict.Add(data,1);
+            data="";
+            dataDict=null;
+            return new List<string>();
+        }
+        else
+        {
+            data=data+c.ToString();
+            if (data.Length==1)
+            {
+                var q=(from item in dict
+                      where item.Key.StartsWith(data)
+                      orderby item.Value descending, item.Key
+                      select item);
+                dataDict=q.ToDictionary(t=>t.Key,t=>t.Value);
+            }
+            else if (dataDict.Keys.Count>0)
+            {
+                var q=from item in dataDict
+                      where item.Key.StartsWith(data)
+                      orderby item.Value descending, item.Key
+                      select item;
+                dataDict=q.ToDictionary(t=>t.Key,t=>t.Value);
+            }
+            //Console.WriteLine(dataDict.Keys.Count);
+            int i=0;
+            IList<string> list=new List<string>();
+            foreach(string s in dataDict.Keys)
+            {
+                list.Add(s);
+                i++;
+                if (i==3)
+                    break;
+            }
+            return list;
+        }
+    }
+}
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem obj = new AutocompleteSystem(sentences, times);
+ * IList<string> param_1 = obj.Input(c);
+ */

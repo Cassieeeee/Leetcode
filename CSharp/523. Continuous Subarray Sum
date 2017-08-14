@@ -1,0 +1,32 @@
+public class Solution {
+    public bool CheckSubarraySum(int[] nums, int k) {
+        if (nums!=null && nums.Length>0)
+        {
+            int runningSum=0;
+            Dictionary<int,int> dict=new Dictionary<int,int>();
+            for(int i=0;i<nums.Length;i++)
+            {
+                runningSum+=nums[i];
+                if (k!=0)
+                {
+                    runningSum %=k;
+                    if (dict.ContainsKey(runningSum))
+                    {
+                        if (i-dict[runningSum]>1)
+                            return true;
+                    }
+                }
+                
+                if (runningSum==0 && i>0)
+                    return true;
+                
+                if (!dict.ContainsKey(runningSum))
+                    dict.Add(runningSum,i);
+            }
+            
+            return false;
+        }
+        else
+            return false;
+    }
+}

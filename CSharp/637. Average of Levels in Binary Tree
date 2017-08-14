@@ -1,0 +1,85 @@
+Solution1
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public IList<double> AverageOfLevels(TreeNode root) {
+        IList<double> list=new List<double>();
+        Dictionary<int,KeyValuePair<int,double>> dict=new Dictionary<int,KeyValuePair<int,double>>();
+        if (root!=null)
+        {
+            traverseTree(root,dict,0);
+            foreach(int key in dict.Keys)
+            {
+                list.Add(dict[key].Value);
+            }
+        }
+        return list;
+    }
+    
+    private void traverseTree(TreeNode node,Dictionary<int,KeyValuePair<int,double>> dict,int level)
+    {
+        if (node!=null)
+        {
+            if (!dict.ContainsKey(level))
+            {
+                dict.Add(level,new KeyValuePair<int,double>(1,(double)node.val));
+            }
+            else
+            {
+                int old=dict[level].Key;
+                double v=dict[level].Value;
+                dict[level]=new KeyValuePair<int,double>(old+1,(double)(v*old+node.val)/(old+1));
+            }
+            traverseTree(node.left,dict,level+1);
+            traverseTree(node.right,dict,level+1);
+        }
+    }
+}
+
+Solution2
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public IList<double> AverageOfLevels(TreeNode root) {
+        IList<double> list=new List<double>();
+        if (root!=null)
+        {
+            Queue<TreeNode> queue=new Queue<TreeNode>();
+            queue.Enqueue(root);
+            while(queue.Count>0)
+            {
+                int n=queue.Count;
+                double sum=0;
+                for(int i=0;i<n;i++)
+                {
+                    TreeNode node=queue.Dequeue();
+                    sum+=node.val;
+                    if (node.left!=null)
+                        queue.Enqueue(node.left);
+                    if (node.right!=null)
+                        queue.Enqueue(node.right);
+                }
+                list.Add(sum/n);
+            }
+        }
+        return list;
+    }
+    
+   
+}

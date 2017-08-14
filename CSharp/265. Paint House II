@@ -1,0 +1,44 @@
+public class Solution {
+    public int MinCostII(int[,] costs) {
+        if (costs==null)
+            return 0;
+        int m=costs.GetLength(0);
+        int n=costs.GetLength(1);
+        if (m==0 || n==0)
+            return 0;
+        if (n==1)
+        {
+            return (m==1)? costs[0,0]:0;
+        }
+
+        int preMin=0, preColor=-1,preSecMin=0;
+        for(int i=0;i<m;i++)
+        {
+            int min=int.MaxValue,color=-1,secMin=int.MaxValue;
+            for(int j=0;j<n;j++)
+            {
+                int val=costs[i,j]+ ((j==preColor) ? preSecMin: preMin);
+                if (color<0)
+                {
+                    min=val;
+                    color=j;
+                }
+                else if (val<min)
+                {
+                    secMin=min;
+                    min=val;
+                    color=j;
+                }
+                else if (val<secMin)
+                {
+                    secMin=val;
+                }
+            }
+            preMin=min;
+            preColor=color;
+            preSecMin=secMin;
+        }
+        
+        return preMin;
+    }
+}

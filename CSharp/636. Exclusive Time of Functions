@@ -1,0 +1,28 @@
+public class Solution {
+    public int[] ExclusiveTime(int n, IList<string> logs) {
+        int[] results=new int[n];
+        if (logs!=null)
+        {
+            Stack<int> stack=new Stack<int>();
+            int preTime=0;
+            foreach(string log in logs)
+            {
+                string[] arr=log.Split(':');
+                int appId=int.Parse(arr[0]);
+                int time=int.Parse(arr[2]);
+                if (stack.Count>0)
+                    results[stack.Peek()]+=time-preTime;
+                preTime=time;
+                if (arr[1]=="start")
+                    stack.Push(appId);
+                else
+                {
+                    results[stack.Pop()]++;
+                    preTime++;
+                }
+                
+            }
+        }
+        return results;
+    }
+}
