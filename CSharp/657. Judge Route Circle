@@ -1,0 +1,28 @@
+public class Solution {
+    public bool JudgeCircle(string moves) {
+        int[] dir=new int[4];
+        if (!string.IsNullOrEmpty(moves))
+        {
+            foreach(char c in moves)
+            {
+                switch (c)
+                {
+                    case 'L':
+                        dir[0]++;
+                        break;
+                    case 'R':
+                        dir[1]++;
+                        break;
+                    case 'U':
+                        dir[2]++;
+                        break;
+                    case 'D':
+                        dir[3]++;
+                        break;
+                }
+            }
+            return dir[0]==dir[1] && dir[2]==dir[3];
+        }
+        return true;
+    }
+}
