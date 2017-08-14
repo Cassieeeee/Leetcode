@@ -1,0 +1,21 @@
+public class Solution {
+    public int LengthLongestPath(string input) {
+        if (!string.IsNullOrEmpty(input))
+        {
+            int max=0;
+            string[] arr=input.Split(new string[]{"\n"}, StringSplitOptions.None);
+            int[] length=new int[arr.Length+1];
+            foreach(string s in arr)
+            {
+                int idx=s.LastIndexOf("\t")+1;
+                
+                length[idx+1]=length[idx]+s.Length-idx+1;
+                if (s.IndexOf(".")>0)
+                    max=Math.Max(max,length[idx+1]-1);
+            }
+            return max;
+        }
+        else
+            return 0;
+    }
+}
