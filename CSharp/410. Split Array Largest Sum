@@ -1,0 +1,61 @@
+public class Solution {
+    public int SplitArray(int[] nums, int m) {
+        if (nums!=null && nums.Length>=m)
+        {
+            long sum=0;
+            long max=0;
+            foreach(int n in nums)
+            {
+                sum+=n;
+                max=Math.Max(max,n);
+            }
+            if (m==1)
+                return sum>int.MaxValue ?int.MaxValue:(int)sum;
+            if (m==nums.Length)
+                return (int)max;
+            long res=split(nums,max,sum,m);
+            Console.WriteLine(res);
+            return res>int.MaxValue ? int.MaxValue:(int)res;
+        }
+        else
+            return 0;
+    }
+    
+    private long split(int[] nums,long min,long max,int m)
+    {   
+        while(min<max)
+        {
+            long mid=(min+max)/2;
+            if (isValid(nums,mid,m))
+            {
+                max=mid;
+            }
+            else
+            {
+                min=mid+1;
+            }
+        }
+        return max;
+    }
+    
+    private bool isValid(int[] nums,long target,int m)
+    {
+        int count=1;
+        long sum=0;
+        int i=0;
+        while(i<nums.Length)
+        {
+            sum+=nums[i];
+            if (sum>target)
+            {
+                count++;
+                if (count>m)
+                    return false;
+                sum=nums[i];
+            }
+            i++;
+        }
+        
+        return true;
+    }
+}

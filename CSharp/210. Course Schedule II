@@ -1,0 +1,110 @@
+Timeout Solution
+public class Solution {
+    public int[] FindOrder(int numCourses, int[,] prerequisites) {
+        int[] results=new int[numCourses];
+        int[] indegree=new int[numCourses];
+        Dictionary<int,List<int>> dict=new Dictionary<int,List<int>>();
+        for(int i=0;i<prerequisites.GetLength(0);i++)
+        {
+            indegree[prerequisites[i,0]]=indegree[prerequisites[i,1]]+1;
+            if (dict.ContainsKey(prerequisites[i,0]))
+            {
+                if (dict[prerequisites[i,0]].Contains(prerequisites[i,1]))
+                    return new int[0]; 
+                foreach(int k in dict[prerequisites[i,0]])
+                {
+                    if (dict.ContainsKey(k) && dict[k].Contains(prerequisites[i,1]))
+                        return new int[0]; 
+                    DFS(indegree,dict,k,indegree[prerequisites[i,0]]+1);
+                }
+            }
+            if (dict.ContainsKey(prerequisites[i,1]))
+            {
+                dict[prerequisites[i,1]].Add(prerequisites[i,0]);
+            }
+            else
+                dict.Add(prerequisites[i,1],new List<int>(){prerequisites[i,0]});
+        }
+        for(int i=0;i<numCourses;i++)
+        {
+            int min=0;
+            for(int j=1;j<numCourses;j++)
+            {
+                if (indegree[j]<indegree[min])
+                    min=j;
+            }
+            
+            results[i]=min;
+            indegree[min]=int.MaxValue;
+        }
+        
+        
+        return results;
+    }
+    
+    private void DFS(int[] indegree,Dictionary<int,List<int>> dict, int k,int degree)
+    {
+        indegree[k]=degree;
+        Queue<int> queue=new Queue<int>();
+        queue.Enqueue(k);
+        while(queue.Count>0)
+        {
+            int key=queue.Dequeue();
+            if(dict.ContainsKey(key))
+            {
+                foreach(int dep in dict[key])
+                {
+                    queue.Enqueue(dep);
+                    indegree[dep]=indegree[key]+1;
+                }
+            }
+        }
+    }
+}
+
+Accepted Solution
+
+public class Solution {
+    public int[] FindOrder(int numCourses, int[,] prerequisites) {
+        int[] results=new int[numCourses];
+        int[] indegree=new int[numCourses];
+        Dictionary<int,List<int>> dict=new Dictionary<int,List<int>>();
+        for(int i=0;i<prerequisites.GetLength(0);i++)
+        {
+            indegree[prerequisites[i,0]]++;
+            if (dict.ContainsKey(prerequisites[i,1]))
+            {
+                dict[prerequisites[i,1]].Add(prerequisites[i,0]);
+            }
+            else
+                dict.Add(prerequisites[i,1],new List<int>(){prerequisites[i,0]});
+        }
+        Queue<int> queue=new Queue<int>();
+        for(int i=0;i<numCourses;i++)
+        {
+            if (indegree[i]==0)
+                queue.Enqueue(i);
+        }
+        int visited=0;
+        while(queue.Count>0)
+        {
+            int n=queue.Dequeue();
+            results[visited]=n;
+            if (dict.ContainsKey(n))
+            {
+                foreach(int dep in dict[n])
+                {
+                    indegree[dep]--;
+                    if (indegree[dep]==0)
+                        queue.Enqueue(dep);
+                }
+            }
+            visited++;
+            
+        }
+        
+        
+        return visited==numCourses ? results: new int[0];
+    }
+    
+}

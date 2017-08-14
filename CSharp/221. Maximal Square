@@ -1,0 +1,43 @@
+public class Solution {
+    public int MaximalSquare(char[,] matrix) {
+        int max=0;
+        int m=matrix.GetLength(0);
+        int n=matrix.GetLength(1);
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if (matrix[i,j]=='1')
+                {
+                    max=Math.Max(max,getMax(matrix,i,j));
+                    
+                }
+            }
+        }
+        return max;
+    }
+    
+    private int getMax(char[,] matrix,int startI,int startJ)
+    {
+        int m=matrix.GetLength(0);
+        int n=matrix.GetLength(1);
+        int l=1;
+        while(startI+l<m && startJ+l<n && matrix[startI+l,startJ]=='1' && matrix[startI,startJ+l]=='1')
+        {
+            bool isSquare=true;
+            for(int i=0;i<=l;i++)
+            {
+                if (matrix[startI+l,startJ+i]=='0' || matrix[startI+i,startJ+l]=='0')
+                {
+                    isSquare=false;
+                    break;
+                }
+            }
+            if (!isSquare)
+                break;
+            l++;
+        }
+        
+        return l*l;
+    }
+}
