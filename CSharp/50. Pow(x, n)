@@ -1,0 +1,19 @@
+public class Solution {
+    public double MyPow(double x, int n) {
+        if (n==0)
+            return 1;
+        if (n==1)
+            return x;
+        if (n<0) {
+            if (n>int.MinValue)
+                return 1/MyPow(x,-n);
+            else
+                return 1/(MyPow(x,int.MaxValue)*x);
+        }
+        double v=MyPow(x,n/2);
+        if ((n&1)==1)
+            return v*v*x;
+        else
+            return v*v;
+    }
+}
