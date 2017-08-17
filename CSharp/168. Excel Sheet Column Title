@@ -1,0 +1,18 @@
+public class Solution {
+    public string ConvertToTitle(int n) {
+        string res="";
+        while(n>0) {
+            int num=n%26;
+            if (num==0) {
+                res="Z"+res;
+                n=(n-1)/26;
+            }
+            else
+            {
+                res =((char)('A'+num-1)).ToString()+res;
+                n=n/26;
+            }            
+        }
+        return res;
+    }
+}

@@ -21,3 +21,32 @@ public class Solution {
     
     
 }
+
+public class Solution {
+    Dictionary<string,bool> dict=new Dictionary<string,bool>();
+    
+    public bool WordBreak(string s, IList<string> wordDict) {
+        if (!string.IsNullOrEmpty(s)) {
+            return canBreak(s,wordDict);
+        } else
+            return true;
+    }
+    private bool canBreak(string s,IList<string> words)
+    {
+        if (dict.ContainsKey(s))
+            return dict[s];
+        if (s=="")
+            return true;
+        bool result=false;
+        for(int i=1;i<=s.Length;i++) {
+            string w=s.Substring(0,i);
+            if (words.Contains(w)) {
+                result=canBreak(s.Substring(i),words);
+                if (result)
+                    break;
+            }
+        }
+        dict.Add(s,result);
+        return result;
+    }
+}

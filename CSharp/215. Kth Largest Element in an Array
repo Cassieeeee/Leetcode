@@ -1,0 +1,28 @@
+public class Solution {
+    public int FindKthLargest(int[] nums, int k) {
+        SortedList<int,int> dict=new SortedList<int,int>();
+        int i=0;
+        foreach(int n in nums) {
+            if (i<k) {
+                i++;
+                if (dict.ContainsKey(n)) {
+                    dict[n]++;
+                } else
+                    dict.Add(n,1);
+            }
+            else {
+                if (n>dict.Keys[0]) {
+                    dict[dict.Keys[0]]--;
+                    if (dict[dict.Keys[0]]==0)
+                        dict.RemoveAt(0);
+                    if (dict.ContainsKey(n)) {
+                        dict[n]++;
+                    } else
+                        dict.Add(n,1);
+                    
+                }
+            }
+        }
+        return dict.Keys[0];
+    }
+}

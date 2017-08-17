@@ -1,0 +1,42 @@
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+
+public class BSTIterator {
+
+    Queue<TreeNode> queue;
+    public BSTIterator(TreeNode root) {
+        queue=new Queue<TreeNode>();
+        setupQueue(root);
+    }
+    
+    private void setupQueue(TreeNode node) {
+        if (node==null)
+            return;
+        if (node.left!=null)
+            setupQueue(node.left);
+        queue.Enqueue(node);
+        if (node.right!=null)
+            setupQueue(node.right);
+    }
+
+    /** @return whether we have a next smallest number */
+    public bool HasNext() {
+        return queue.Count>0;
+    }
+
+    /** @return the next smallest number */
+    public int Next() {
+        if (queue.Count>0) {
+            TreeNode n=queue.Dequeue();
+            return n.val;
+        }
+        return -1;
+    }
+}
