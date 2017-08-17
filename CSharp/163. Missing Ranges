@@ -1,0 +1,52 @@
+public class Solution {
+    public IList<string> FindMissingRanges(int[] nums, int lower, int upper) {
+        IList<string> list=new List<string>();
+        if (nums!=null) {
+            int start=0,end=nums.Length-1;
+            while(start<nums.Length && nums[start]<lower) 
+                start++;
+            while(end>=0 && nums[end]>upper)
+                end--;
+            if (start==nums.Length || end<0) {
+                if (lower<upper)
+                    list.Add(lower.ToString()+"->"+upper.ToString());
+                else
+                    list.Add(lower.ToString());
+            }
+            else
+            {
+                string s="";
+                if (lower!=nums[start]) {
+                    s=getRange(lower,nums[start]-1);
+                    list.Add(s);
+                }
+                while(start<end) {
+                    while(start<end && nums[start+1]==nums[start])
+                        start++;
+                    if (start==end)
+                        break;
+                    s=getRange(nums[start]+1,nums[start+1]-1);
+                    if (s!="")
+                        list.Add(s);
+                    start++;
+                }
+                if (upper!=nums[end])
+                {
+                    s=getRange(nums[end]+1,upper);
+                    list.Add(s);
+                }
+            }
+        }
+        return list;
+    }
+    
+    private string getRange(int start,int end)
+    {
+        if (end<start)
+            return "";
+        if (start==end)
+            return start.ToString();
+        else
+            return start.ToString()+"->"+end.ToString();
+    }
+}

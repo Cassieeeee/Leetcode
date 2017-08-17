@@ -1,0 +1,33 @@
+public class Solution {
+    Dictionary<string,IList<string>> dict=new Dictionary<string,IList<string>>();
+    
+    public IList<string> WordBreak(string s, IList<string> wordDict) {
+        IList<string> list=new List<string>();
+        if (!string.IsNullOrEmpty(s) && wordDict!=null) {
+            return generateList(s,wordDict);
+        }
+        return list;
+    }
+    
+    private IList<string> generateList(string s, IList<string> wordDict)
+    {
+        if (dict.ContainsKey(s))
+            return dict[s];
+        IList<string> res=new List<string>();
+        if (s!="")
+        {
+            foreach(string word in wordDict) {
+                if (s.StartsWith(word)) {
+                    IList<string> subList=generateList(s.Substring(word.Length),wordDict);
+                    foreach(string sub in subList) {
+                        res.Add((word + " "+ sub).Trim());
+                    }
+                }
+            }
+            if (!dict.ContainsKey(s))
+                dict.Add(s,res);
+        } else 
+            res.Add("");
+        return res;
+    }
+}
