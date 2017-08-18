@@ -1,0 +1,25 @@
+public class Solution {
+    public int FindComplement(int num) {
+        int p=num;
+        int q=1;
+        while(num>0)
+        {
+            num=num/2;
+            q=q*2;
+        }
+        q=q-1;
+        p=p^q;
+        int n=0;
+        int m=1;
+        while(p>0)
+        {
+            if ((p&1)==1)
+            {
+                n+=m;
+            }
+            p=p>>1;
+            m=m*2;
+        }
+        return n;
+    }
+}

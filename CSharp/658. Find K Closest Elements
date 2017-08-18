@@ -1,0 +1,53 @@
+public class Solution {
+    public IList<int> FindClosestElements(IList<int> arr, int k, int x) {
+        if (arr==null || arr.Count<=k)
+            return arr;
+        int minIndex=0;
+        for(int i=1;i<arr.Count;i++)
+        {
+            if (Math.Abs(arr[i]-x)<Math.Abs(arr[minIndex]-x))
+                minIndex=i;
+        }
+        IList<int> list=new List<int>();
+        if (minIndex==0)
+        {
+            for(int i=0;i<k;i++)
+                list.Add(arr[i]);
+            return list;
+        }
+        else
+        {
+            list.Add(arr[minIndex]);
+            k=k-1;
+            int low=minIndex-1;
+            int high=minIndex+1;
+            while(k>0 && low>=0 && high<arr.Count)
+            {
+                if (Math.Abs(arr[low]-x)<=Math.Abs(arr[high]-x))
+                {
+                    list.Insert(0,arr[low]);
+                    low--;
+                }
+                else
+                {
+                    list.Add(arr[high]);
+                    high++;
+                }
+                k--;
+            }
+            while (k>0 && low>=0)
+            {
+                list.Insert(0,arr[low]);
+                low--;
+                k--;
+            }
+            while(k>0 && high<arr.Count)
+            {
+                list.Add(arr[high]);
+                high++;
+                k--;
+            }
+            return list;
+        }
+    }
+}

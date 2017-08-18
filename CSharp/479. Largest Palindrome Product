@@ -1,0 +1,29 @@
+public class Solution {
+    public int LargestPalindrome(int n) {
+        if (n<1)
+            return 0;
+        if (n==1)
+            return 9;
+        int max=(int)Math.Pow(10,n)-1;
+        for(int i=max-1;i>max/10;i--)
+        {
+            long v=long.Parse(i.ToString()+Reverse(i.ToString()));
+            for(long j=max;j*j>=v;j--)
+            {
+                if (v%j==0)
+                {
+                    Console.WriteLine("{0},{1}",v,j);
+                    return (int)(v%1337);
+                }
+            }
+        }
+        return 0;
+    }
+    
+    public static string Reverse( string s )
+    {
+        char[] charArray = s.ToCharArray();
+        Array.Reverse( charArray );
+        return new string( charArray );
+    }
+}

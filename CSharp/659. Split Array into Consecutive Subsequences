@@ -1,0 +1,43 @@
+public class Solution {
+    public bool IsPossible(int[] nums) {
+        Dictionary<int,int> freq=new Dictionary<int,int>();
+        Dictionary<int,int> appends=new Dictionary<int,int>();
+        if (nums!=null && nums.Length>2)
+        {
+            foreach(int n in nums)
+            {
+                if (freq.ContainsKey(n))
+                    freq[n]++;
+                else
+                    freq.Add(n,1);
+            }
+            foreach(int n in nums)
+            {
+                if (freq[n]==0)
+                    continue;
+                else if (appends.ContainsKey(n) && appends[n]>0)
+                {
+                    appends[n]--;
+                    if (appends.ContainsKey(n+1))
+                        appends[n+1]++;
+                    else
+                        appends.Add(n+1,1);
+                }
+                else if (freq.ContainsKey(n+1) && freq.ContainsKey(n+2) && freq[n+1]>0 && freq[n+2]>0)
+                {
+                    freq[n+1]--;
+                    freq[n+2]--;
+                    if (!appends.ContainsKey(n+3))
+                        appends.Add(n+3,1);
+                    else
+                        appends[n+3]++;
+                }
+                else
+                    return false;
+                freq[n]--;
+            }
+            return true;
+        }
+        return false;
+    }
+}

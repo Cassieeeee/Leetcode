@@ -1,6 +1,37 @@
 public class Solution {
     public string AddBinary(string a, string b) {
         if (!string.IsNullOrEmpty(a) && !string.IsNullOrEmpty(b))
+        {   
+            string result="";
+            int i=a.Length-1,j=b.Length-1;
+            int carry=0;
+            while(i>=0 || j>=0 || carry==1)
+            {
+                int n1=(i>=0) ? a[i]-'0':0;
+                int n2=(j>=0) ? b[j]-'0':0;
+                int sum=n1^n2^carry;
+                carry=(n1+n2+carry)/2;
+                result=sum.ToString()+result;
+                i--;
+                j--;
+            }
+            
+            return result;
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(a))
+                return b;
+            if (string.IsNullOrEmpty(b))
+                return a;
+        }
+        return "";
+    }
+}
+
+public class Solution {
+    public string AddBinary(string a, string b) {
+        if (!string.IsNullOrEmpty(a) && !string.IsNullOrEmpty(b))
         {
             if (a.Length<b.Length)
                 return AddBinary(b,a);
