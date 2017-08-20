@@ -30,3 +30,31 @@ public class Solution {
         }
     }
 }
+
+
+public class Solution {
+    
+    public int FindTargetSumWays(int[] nums, int S) {
+        int count=0;
+        if (nums!=null && nums.Length>0) {
+            count=getCount(nums,0,S,new Dictionary<string,int>());
+        }
+        return count;
+    }
+    
+    private int getCount(int[] nums,int index,int target,Dictionary<string,int> dict) {
+        if (index==nums.Length) {
+            if (target==0)
+                return 1;
+            else
+                return 0;
+        }
+        string key=index.ToString()+":"+target.ToString();
+        if (dict.ContainsKey(key))
+            return dict[key];
+        int minus=getCount(nums,index+1,target+nums[index],dict);
+        int plus=getCount(nums,index+1,target-nums[index],dict);
+        dict.Add(key,minus+plus);
+        return minus+plus;
+    }
+}
