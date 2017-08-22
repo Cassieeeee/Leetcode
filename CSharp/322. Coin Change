@@ -1,0 +1,32 @@
+public class Solution {
+    Dictionary<int,int> dict=new Dictionary<int,int>();
+    
+    public int CoinChange(int[] coins, int amount) {
+       if (coins!=null && coins.Length>0 && amount>=0) {
+           if (amount==0)
+               return 0;
+           if (coins.Length==1)
+               return (amount % coins[0]==0 ? amount/coins[0]:-1);
+           if (dict.ContainsKey(amount))
+               return dict[amount];
+           
+           Array.Sort(coins);
+           int n=amount+1;
+           for(int i=coins.Length-1;i>=0;i--)
+           {
+               int cur=0;
+               if (amount>=coins[i]) {
+                   int next=CoinChange(coins,amount-coins[i]);
+                   if (next>=0)
+                       cur=next+1;                 
+               }
+               if (cur>0)
+                   n=Math.Min(n,cur);
+           }
+           int res=n==amount+1 ? -1:n;
+           dict.Add(amount,res);
+           return res;
+       } else
+           return -1;
+    }
+}

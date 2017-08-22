@@ -1,0 +1,31 @@
+public class Solution {
+    public bool IncreasingTriplet(int[] nums) {
+        if (nums==null || nums.Length<3)
+            return false;
+        Dictionary<int,int> dict=new Dictionary<int,int>();
+        int start=0,end=nums.Length-1;
+        while(start<end-1 && nums[start+1]<nums[start])
+            start++;
+        while(start<end-1 && nums[end-1]>nums[end])
+            end--;
+        if (end-start<2)
+            return false;
+        for(int i=start;i<=end;i++) {
+            foreach(int k in dict.Keys.ToList()) {
+                if (nums[i]>k) {
+                    if (dict[k]==k)
+                        dict[k]=nums[i];
+                    else {
+                        if (nums[i]>dict[k])
+                            return true;
+                        else
+                            dict[k]=nums[i];
+                    }
+                }               
+            }
+            if (!dict.ContainsKey(nums[i]))
+                    dict.Add(nums[i],nums[i]);
+        }
+        return false;
+    }
+}

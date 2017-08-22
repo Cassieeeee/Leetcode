@@ -1,0 +1,37 @@
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     public int start;
+ *     public int end;
+ *     public Interval() { start = 0; end = 0; }
+ *     public Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+public class Solution {
+    public bool CanAttendMeetings(Interval[] intervals) {
+        if (intervals!=null && intervals.Length>0)
+        {
+            if (intervals.Length==1)
+                return true;
+            int[] starts=new int[intervals.Length];
+            int[] ends=new int[intervals.Length];
+            for(int i=0;i<intervals.Length;i++)
+            {
+                starts[i]=intervals[i].start;
+                ends[i]=intervals[i].end;
+            }
+            Array.Sort(starts);
+            Array.Sort(ends);
+            int end=ends[0];
+            for(int i=1;i<intervals.Length;i++)
+            {
+                if (starts[i]<end)
+                    return false;
+                end=ends[i];
+            }
+            return true;
+        }
+        else
+            return true;
+    }
+}

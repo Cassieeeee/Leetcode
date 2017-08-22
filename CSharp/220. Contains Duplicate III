@@ -1,0 +1,24 @@
+public class Solution {
+    public bool ContainsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if (k<1 || t<0)
+            return false;
+        
+        if (nums!=null && nums.Length>1) {
+            Dictionary<long,long> dict=new Dictionary<long,long>();
+            for(int i=0;i<nums.Length;i++) {
+                long r=(long)nums[i]-int.MinValue;
+                long bucket=r/((long)t+1);
+                if (dict.ContainsKey(bucket) || (dict.ContainsKey(bucket-1) && r-dict[bucket-1]<=t) || (dict.ContainsKey(bucket+1) && dict[bucket+1]-r<=t))
+                    return true;
+                if (dict.Count>=k) {
+                    long lastBucket=((long)(nums[i-k]) - int.MinValue)/((long)t+1);
+                    dict.Remove(lastBucket);
+                }
+                dict.Add(bucket,r);
+            }
+            return false;
+        }
+        else
+            return false;
+    }
+}

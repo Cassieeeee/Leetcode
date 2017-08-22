@@ -50,3 +50,29 @@ public class Solution {
         }
     }
 }
+
+public class Solution {
+    public bool FindTarget(TreeNode root, int k) {
+        if (root!=null)
+        {
+            if (root.left!=null && root.val+root.left.val==k)
+                return true;
+            if (root.right!=null && root.val+root.right.val==k)
+                return true;
+            HashSet<int> ht=new HashSet<int>();
+            return find(root,ht,k);
+        }
+        else
+            return false;
+    }
+    
+    private bool find(TreeNode node,HashSet<int> ht,int target)
+    {
+        if (node==null)
+            return false;
+        if (ht.Contains(target-node.val))
+            return true;
+        ht.Add(node.val);
+        return find(node.left,ht,target)||find(node.right,ht,target);
+    }
+}

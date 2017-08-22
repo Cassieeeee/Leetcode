@@ -1,0 +1,21 @@
+public class MovingAverage {
+
+    int size;
+    List<int> values;
+    int sum=0;
+    /** Initialize your data structure here. */
+    public MovingAverage(int size) {
+        this.size=size;
+        values=new List<int>();
+    }
+    
+    public double Next(int val) {
+        values.Add(val);
+        sum+=val;
+        if (values.Count>size) {
+            sum -=values[0];
+            values.RemoveAt(0);
+        }
+        return (double)sum/values.Count;
+    }
+}
