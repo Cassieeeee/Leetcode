@@ -1,0 +1,57 @@
+public class Solution {
+    TierNode root;
+    IList<string> list=new List<string>();
+    public IList<string> FindWords(char[,] board, string[] words) {    
+        setupTree(words);
+        if (words!=null) {
+            int m=board.GetLength(0);
+            int n=board.GetLength(1); 
+            for(int i=0;i<m;i++) {
+                for(int j=0;j<n;j++) {
+                    findWord(board,i,j,root);
+                }
+            }
+        }
+        return list;
+    }
+    
+    private void findWord(char[,] board,int i,int j,TierNode parent) {
+        if (i>=0 && j>=0 && i<board.GetLength(0) && j<board.GetLength(1) && board[i,j]!='#')
+        {
+            char c=board[i,j];
+            if (parent.Nodes[c-'a']==null)
+                return;
+            parent=parent.Nodes[c-'a'];
+            if (parent.word!=null) {
+                list.Add(parent.word);
+                parent.word=null;
+            }
+            board[i,j]='#';
+            findWord(board,i-1,j,parent);
+            findWord(board,i+1,j,parent);
+            findWord(board,i,j-1,parent);
+            findWord(board,i,j+1,parent);
+            board[i,j]=c;
+        }
+        
+    }
+    
+    private void setupTree(string[] words) {
+        root=new TierNode();
+        foreach(string w in words) {
+            TierNode p=root;
+            foreach(char c in w) {
+                if (p.Nodes[c-'a']==null) {
+                    p.Nodes[c-'a']=new TierNode();
+                }
+                p=p.Nodes[c-'a'];
+            }
+            p.word=w;
+        }
+    }
+}
+
+class TierNode {
+    public TierNode[] Nodes=new TierNode[26];
+    public string word;
+}

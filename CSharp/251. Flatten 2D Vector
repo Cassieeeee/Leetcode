@@ -1,0 +1,40 @@
+public class Vector2D {
+
+    int i=-1,j=-1;
+    IList<IList<int>> list;
+    public Vector2D(IList<IList<int>> vec2d) {
+        list=vec2d;
+        if (list!=null) {
+            if (list.Count>0) {
+                i=0;
+                while(i<list.Count && list[i].Count==0) 
+                    i++;
+                if (i<list.Count) 
+                    j=0;
+            }
+        }
+    }
+
+    public bool HasNext() {
+        if (i>-1 && j>-1 && i<list.Count && j<list[i].Count) {
+            return true;
+        }
+        return false;
+    }
+
+    public int Next() {
+        int result=list[i][j];
+        j++;
+        if (j==list[i].Count)
+        {
+            i++;
+            while(i<list.Count && list[i].Count==0) 
+                i++;
+            if (i<list.Count) 
+                j=0;
+            else
+                j=-1;
+        }
+        return result;
+    }
+}

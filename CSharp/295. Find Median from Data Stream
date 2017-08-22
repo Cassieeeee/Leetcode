@@ -1,0 +1,82 @@
+public class MedianFinder {
+
+    SortedList<int,int> maxList=new SortedList<int,int>();
+    SortedList<int,int> minList=new SortedList<int,int>();
+    int maxListSize=0;
+    int minListSize=0;
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        
+    }
+    
+    public void AddNum(int num) {
+        if (minListSize>0 && num>minList.Keys.Last()) {
+            if (maxList.ContainsKey(num)) {
+                maxList[num]++;
+            }
+            else
+                maxList.Add(num,1);
+            maxListSize++;
+        } else {
+            if (minList.ContainsKey(num)) {
+                minList[num]++;
+            }
+            else
+                minList.Add(num,1);
+            minListSize++;
+        }
+        if (maxListSize-minListSize==2) {
+            int min=maxList.Keys[0];
+            if (maxList[min]>1)
+                maxList[min]--;
+            else
+                maxList.Remove(min);
+            maxListSize--;
+
+            if (minList.ContainsKey(min))
+                minList[min]++;
+            else
+                minList.Add(min,1);
+            minListSize++;
+        } 
+        if (minListSize-maxListSize==2) {
+            int max=minList.Keys.Last();
+            if (minList[max]>1)
+                minList[max]--;
+            else
+                minList.Remove(max);
+            minListSize--;
+
+            if (maxList.ContainsKey(max))
+                maxList[max]++;
+            else
+                maxList.Add(max,1);
+            maxListSize++;
+        }
+    }
+    
+    public double FindMedian() {
+        if (maxListSize>0 || minListSize>0) {
+            //Console.WriteLine(maxList[maxList.Keys[0]]);
+            //Console.WriteLine(minList[minList.Keys.Last()]);
+            if (maxListSize==minListSize)
+                return ((double)(minList.Keys.Last()+maxList.Keys[0])/2);
+            else
+            {
+                if (maxListSize>minListSize)
+                    return maxList.Keys[0];
+                else
+                    return minList.Keys.Last();
+            }
+        }
+        else
+            return 0;
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.AddNum(num);
+ * double param_2 = obj.FindMedian();
+ */
